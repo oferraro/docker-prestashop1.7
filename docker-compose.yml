@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  presta-web:
+    container_name: presta-web
+    build:
+      context: ./prestashop/
+      dockerfile: Dockerfile
+    ports: 
+      - "8080:8080"
+    env_file:
+      - ./prestashop/.env
+    volumes: 
+      - ./app:/var/www/html/
+    depends_on:
+      - presta-db
+    networks:
+      - prestashop_net
+## Mysql Server 
+  presta-db:
+    image: mariadb
+    container_name: presta-db
+    volumes:
+      - presta-db_data:/var/lib/mysql/data
+    env_file:
+      - ./prestashop/.env
+    networks:
+      - prestashop_net
+## End of Mysql Server
+volumes:
+  presta-db_data: # This is for mariadb 
+
+networks:
+  prestashop_net:
